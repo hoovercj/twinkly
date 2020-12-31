@@ -5,7 +5,11 @@ import { Snake as SnakeGame } from '../lib/snake';
 import { EMPTY_VALUE, FRUIT_VALUE, GameState, Piece } from '../lib/snake.types';
 import { LightMatrix, LightMatrixProps, RGB } from './LightMatrix';
 
-export function Snake(): JSX.Element {
+export interface SnakeProps {
+    onLightsChanged: (lights: RGB[][]) => void;
+}
+
+export function Snake(props: SnakeProps): JSX.Element {
     const timeout = useRef<number>(0);
 
     const direction = useRef<Direction>(Direction.right);
@@ -53,6 +57,10 @@ export function Snake(): JSX.Element {
         direction.current = Direction.right;
         startTimer();
     }, [startTimer]);
+
+    useEffect(() => {
+        props.onLightsChanged(lightMatrixProps?.lights);
+    }, [props, lightMatrixProps]);
 
     return (
         <>
